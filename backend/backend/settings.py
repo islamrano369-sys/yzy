@@ -155,6 +155,12 @@ CORS_URLS_REGEX = r"^/api/.*$"
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_ANALYSIS = False
 
+# Authentication backends (allows email or username login)
+AUTHENTICATION_BACKENDS = [
+    "api.backends.EmailOrUsernameModelBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
 # REST Framework authentication config
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (

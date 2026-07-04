@@ -102,31 +102,14 @@ const login = async ({ email, password }) => {
 }
 
 const register = async ({ name, email, password }) => {
-  // 将昵称拆分为姓（last_name）和名（first_name）
-  const trimmedName = (name || '').trim()
-  let firstName = trimmedName
-  let lastName = ''
-
-  if (trimmedName.length > 1) {
-    if (!trimmedName.includes(' ') && trimmedName.length <= 4) {
-      // 中文姓名拆分（如：张三 -> 姓：张，名：三；诸葛孔明 -> 姓：诸，名：葛孔明）
-      lastName = trimmedName.slice(0, 1)
-      firstName = trimmedName.slice(1)
-    } else {
-      // 英文或其他带空格姓名拆分（如：John Doe -> 姓：Doe，名：John）
-      const parts = trimmedName.split(' ')
-      firstName = parts[0]
-      lastName = parts.slice(1).join(' ')
-    }
-  }
-
+  // 按照您的要求，直接以填写的用户名（name）作为数据库的 username，并存入 first_name
   await api.post('/api/auth/users/', {
-    username: email,
-    email: email,
+    username: name.trim(),
+    email: email.trim(),
     password: password,
     re_password: password,
-    first_name: firstName,
-    last_name: lastName
+    first_name: name.trim(),
+    last_name: ''
   })
   await login({ email, password })
 }
@@ -134,13 +117,8 @@ const register = async ({ name, email, password }) => {
 const fetchProfile = async () => {
   try {
     const res = await api.get('/api/auth/users/me/')
-    // 组合 last_name 和 first_name 作为显示名称，如果没有则降级使用邮箱前缀
-    let displayName = ''
-    if (res.last_name || res.first_name) {
-      displayName = `${res.last_name}${res.first_name}`.trim()
-    } else {
-      displayName = res.username.split('@')[0] || 'NOVA 学员'
-    }
+    // 个人信息名称与数据库的 username 完全保持一致
+    const displayName = res.username || 'NOVA 学员'
     user.value = { name: displayName, email: res.email }
   } catch (error) {
     console.error('获取用户信息失败:', error)
