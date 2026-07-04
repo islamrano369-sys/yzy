@@ -8,3 +8,4 @@
 - 开发网站的UX时，使用codex的Figma插件
 - 开发网站的UI时，使用codex的canva插件
 - 通过django-cors-headers从后端解决浏览器的跨域问题
+- 使用django完成用户模块的开发，采用JWT的认证方式
