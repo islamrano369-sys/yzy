@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "djoser",                    # Djoser Auth Library
     "corsheaders",               # CORS headers
     "api",                       # REST API App
+    "main",                      # Course Business App
 ]
 
 MIDDLEWARE = [
