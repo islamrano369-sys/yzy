@@ -20,9 +20,9 @@ const safeWrite = (key, value) => {
 
 const theme = ref(safeRead('nova-theme', 'dark'))
 const user = ref(safeRead('nova-user', null))
-const membership = ref(safeRead('nova-membership', null))
-const purchasedCourses = ref(safeRead('nova-courses', []))
-const orders = ref(safeRead('nova-orders', []))
+const membership = ref(null)
+const purchasedCourses = ref([])
+const orders = ref([])
 const authOpen = ref(false)
 const authMode = ref('login')
 
@@ -35,10 +35,42 @@ watch(theme, (value) => {
   applyTheme(value)
   safeWrite('nova-theme', value)
 })
-watch(user, (value) => safeWrite('nova-user', value), { deep: true })
-watch(membership, (value) => safeWrite('nova-membership', value), { deep: true })
-watch(purchasedCourses, (value) => safeWrite('nova-courses', value), { deep: true })
-watch(orders, (value) => safeWrite('nova-orders', value), { deep: true })
+
+const loadUserData = (email) => {
+  if (!email) return
+  membership.value = safeRead(`nova-membership-${email}`, null)
+  purchasedCourses.value = safeRead(`nova-courses-${email}`, [])
+  orders.value = safeRead(`nova-orders-${email}`, [])
+}
+
+watch(user, (value) => {
+  safeWrite('nova-user', value)
+  if (value && value.email) {
+    loadUserData(value.email)
+  } else {
+    membership.value = null
+    purchasedCourses.value = []
+    orders.value = []
+  }
+}, { deep: true, immediate: true })
+
+watch(membership, (value) => {
+  if (user.value && user.value.email) {
+    safeWrite(`nova-membership-${user.value.email}`, value)
+  }
+}, { deep: true })
+
+watch(purchasedCourses, (value) => {
+  if (user.value && user.value.email) {
+    safeWrite(`nova-courses-${user.value.email}`, value)
+  }
+}, { deep: true })
+
+watch(orders, (value) => {
+  if (user.value && user.value.email) {
+    safeWrite(`nova-orders-${user.value.email}`, value)
+  }
+}, { deep: true })
 
 if (localStorage.getItem('access_token')) {
   setTimeout(() => {
@@ -118,15 +150,8 @@ const fetchProfile = async () => {
 
 const logout = () => {
   user.value = null
-  membership.value = null
-  purchasedCourses.value = []
-  orders.value = []
   localStorage.removeItem('access_token')
   localStorage.removeItem('refresh_token')
-  safeWrite('nova-user', null)
-  safeWrite('nova-membership', null)
-  safeWrite('nova-courses', [])
-  safeWrite('nova-orders', [])
 }
 
 const createOrder = (type, id, title, amount) => {
