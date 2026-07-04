@@ -1,0 +1,9 @@
+- 本项目用户端用的是VUE+Tailwind CSS框架，后端用的是Django框架，数据库用的是MySQL
+- 后台管理的网站使用Django Simple UI的主体框架，语言为中文
+- 采用Django ORM模型与数据库进行交互
+- Database Client作为数据库的可视化管理工具
+- mysqlclient作为数据库的驱动程序
+- axios作为接口请求工具
+- api接口的书写要符合RESTful规范
+- 开发网站的UX时，使用codex的Figma插件
+- 开发网站的UI时，使用codex的canva插件
