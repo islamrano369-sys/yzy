@@ -6,9 +6,11 @@ from .views import (
     CustomUserRegistrationView, 
     CustomUserActivationView
 )
+from main.views import CourseViewSet
 
 router = DefaultRouter()
 router.register(r'messages', SystemMessageViewSet, basename='message')
+router.register(r'courses', CourseViewSet, basename='course')
 
 urlpatterns = [
     path('status/', api_status, name='api_status'),

@@ -20,5 +20,7 @@
 
 <script setup>
 import CourseCard from '../components/CourseCard.vue'
-import { courses } from '../data/site'
+import { useStore } from '../composables/useStore'
+
+const { courses } = useStore()
 </script>

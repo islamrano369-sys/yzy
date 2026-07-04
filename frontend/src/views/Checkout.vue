@@ -21,15 +21,15 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ArrowRight, Check, CheckCircle2 } from '@lucide/vue'
 import NotFound from './NotFound.vue'
-import { courses, plans } from '../data/site'
+import { plans } from '../data/site'
 import { useStore } from '../composables/useStore'
 
 const route = useRoute()
 const router = useRouter()
+const { user, openAuth, purchaseCourse, purchaseMembership, courses } = useStore()
 const type = computed(() => route.params.type)
-const item = computed(() => type.value === 'course' ? courses.find((entry) => entry.slug === route.params.id) : plans.find((entry) => entry.id === route.params.id))
+const item = computed(() => type.value === 'course' ? courses.value.find((entry) => entry.slug === route.params.id) : plans.find((entry) => entry.id === route.params.id))
 const status = ref('idle')
-const { user, openAuth, purchaseCourse, purchaseMembership } = useStore()
 if (!user.value) {
   openAuth('login')
   router.replace('/')

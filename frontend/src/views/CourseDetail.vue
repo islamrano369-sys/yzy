@@ -20,13 +20,12 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft, ArrowRight, Check, Code2 } from '@lucide/vue'
 import NotFound from './NotFound.vue'
-import { courses } from '../data/site'
 import { useStore } from '../composables/useStore'
 
 const route = useRoute()
 const router = useRouter()
-const course = computed(() => courses.find((item) => item.slug === route.params.slug))
-const { user, openAuth, hasCourse } = useStore()
+const { user, openAuth, hasCourse, courses } = useStore()
+const course = computed(() => courses.value.find((item) => item.slug === route.params.slug))
 const buy = () => {
   if (hasCourse(course.value.slug)) return router.push('/profile')
   if (!user.value) return openAuth('login')

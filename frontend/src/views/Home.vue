@@ -92,7 +92,10 @@
 import { ArrowRight, ArrowUpRight, Bot, BrainCircuit, Layers3, Quote, Sparkles, Workflow } from '@lucide/vue'
 import AgentCard from '../components/AgentCard.vue'
 import CourseCard from '../components/CourseCard.vue'
-import { agents, courses, metrics, testimonials } from '../data/site'
+import { agents, metrics, testimonials } from '../data/site'
+import { useStore } from '../composables/useStore'
+
+const { courses } = useStore()
 
 const learningPath = [
   { title: '理解', copy: '明确问题、用户、模型能力与产品边界。' },

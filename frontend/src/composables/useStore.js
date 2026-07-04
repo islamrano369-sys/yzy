@@ -23,6 +23,7 @@ const user = ref(safeRead('nova-user', null))
 const membership = ref(null)
 const purchasedCourses = ref([])
 const orders = ref([])
+const courses = ref([])
 const authOpen = ref(false)
 const authMode = ref('login')
 
@@ -71,6 +72,69 @@ watch(orders, (value) => {
     safeWrite(`nova-orders-${user.value.email}`, value)
   }
 }, { deep: true })
+
+const mapCourse = (data) => {
+  const highlightsList = data.highlights ? data.highlights.split('\n').map(h => h.trim()).filter(Boolean) : []
+  const slug = data.id === 1 ? 'ai-fullstack' : (data.id === 2 ? 'agent-engineering' : `course-${data.id}`)
+  
+  return {
+    id: data.id,
+    slug: slug,
+    title: data.title,
+    shortTitle: data.title.length > 8 ? data.title.slice(0, 8) : data.title,
+    description: data.summary,
+    price: Number(data.price),
+    originalPrice: Number(data.original_price),
+    coverImage: data.cover_image,
+    headerImage: data.header_image,
+    detailImage: data.detail_image,
+    instructor: data.instructor,
+    rating: Number(data.rating),
+    level: data.id === 2 ? '进阶提升' : '零基础可学',
+    duration: data.id === 2 ? '42 课时' : '36 课时',
+    projects: data.id === 2 ? '6 个智能体' : '8 个项目',
+    accent: data.id % 2 === 0 ? 'mint' : 'coral',
+    outcomes: highlightsList.length > 0 ? highlightsList : ['独立交付可运行作品', '完成项目实战训练', '获得结业证书'],
+    audience: data.id === 2 ? [
+      '具备基础开发经验的工程师',
+      '企业数字化与自动化负责人',
+      '需要构建垂直智能体的创业者'
+    ] : [
+      '希望转型 AI 开发的程序员',
+      '需要快速验证产品的独立开发者',
+      '想建立完整技术栈的初学者'
+    ],
+    projectsList: data.id === 2 ? [
+      '电商运营 Agent', '数据分析 Agent', '研究报告 Agent', '客户成功 Agent'
+    ] : [
+      'AI 简历优化器', '知识库问答站', '多模型写作工作台', 'AI 产品分析助手'
+    ],
+    syllabus: data.id === 2 ? [
+      ['01', 'Agent 架构', '任务规划、工具调用、上下文和记忆'],
+      ['02', '工作流编排', '顺序、分支、循环与多智能体协作'],
+      ['03', '工具与数据', '搜索、知识库、数据库和内部系统'],
+      ['04', '可靠性工程', '评测、可观测性、护栏与失败恢复'],
+      ['05', '行业落地', '从业务指标到可持续运行的智能体'],
+    ] : [
+      ['01', 'AI 产品思维', '需求拆解、模型边界与可交付原型'],
+      ['02', 'Vue 交互界面', '组件、状态、路由与高质量产品 UI'],
+      ['03', '服务端能力', '接口设计、数据持久化与权限管理'],
+      ['04', '模型接入', '提示词、结构化输出、流式响应与成本控制'],
+      ['05', '产品化上线', '部署、日志、支付与增长闭环'],
+    ]
+  }
+}
+
+const fetchCourses = async () => {
+  try {
+    const res = await api.get('/api/courses/')
+    courses.value = res.map(mapCourse)
+  } catch (error) {
+    console.error('获取课程列表失败:', error)
+  }
+}
+
+fetchCourses()
 
 if (localStorage.getItem('access_token')) {
   setTimeout(() => {
@@ -162,6 +226,7 @@ export const useStore = () => ({
   isMember: computed(() => Boolean(membership.value?.active)),
   purchasedCourses,
   orders,
+  courses,
   authOpen,
   authMode,
   toggleTheme,
@@ -170,6 +235,7 @@ export const useStore = () => ({
   login,
   register,
   logout,
+  fetchCourses,
   purchaseCourse,
   purchaseMembership,
   hasCourse: (slug) => purchasedCourses.value.some((item) => item.slug === slug),
