@@ -1,4 +1,5 @@
 import { computed, ref, watch } from 'vue'
+import api from '../utils/api'
 
 const safeRead = (key, fallback) => {
   try {
@@ -39,6 +40,12 @@ watch(membership, (value) => safeWrite('nova-membership', value), { deep: true }
 watch(purchasedCourses, (value) => safeWrite('nova-courses', value), { deep: true })
 watch(orders, (value) => safeWrite('nova-orders', value), { deep: true })
 
+if (localStorage.getItem('access_token')) {
+  setTimeout(() => {
+    fetchProfile()
+  }, 0)
+}
+
 const toggleTheme = () => {
   theme.value = theme.value === 'dark' ? 'light' : 'dark'
 }
@@ -52,17 +59,41 @@ const closeAuth = () => {
   authOpen.value = false
 }
 
-const login = ({ email }) => {
-  user.value = { name: email.split('@')[0] || 'NOVA 学员', email }
+const login = async ({ email, password }) => {
+  const res = await api.post('/api/auth/jwt/create/', {
+    username: email,
+    password: password
+  })
+  localStorage.setItem('access_token', res.access)
+  localStorage.setItem('refresh_token', res.refresh)
+  await fetchProfile()
 }
 
-const register = ({ name, email }) => {
-  user.value = { name: name || 'NOVA 学员', email }
+const register = async ({ name, email, password }) => {
+  await api.post('/api/auth/users/', {
+    username: email,
+    email: email,
+    password: password,
+    re_password: password
+  })
+  await login({ email, password })
+}
+
+const fetchProfile = async () => {
+  try {
+    const res = await api.get('/api/auth/users/me/')
+    user.value = { name: res.username.split('@')[0] || 'NOVA 学员', email: res.email }
+  } catch (error) {
+    console.error('获取用户信息失败:', error)
+    logout()
+  }
 }
 
 const logout = () => {
   user.value = null
   membership.value = null
+  localStorage.removeItem('access_token')
+  localStorage.removeItem('refresh_token')
   safeWrite('nova-user', null)
   safeWrite('nova-membership', null)
 }

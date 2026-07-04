@@ -53,14 +53,37 @@ const switchMode = () => {
   error.value = ''
 }
 
-const submit = () => {
+const submit = async () => {
   if (!form.email || form.password.length < 6 || (authMode.value === 'register' && !form.name)) {
     error.value = '请填写完整信息，密码至少 6 位。'
     return
   }
-  if (authMode.value === 'login') login(form)
-  else register(form)
   error.value = ''
-  closeAuth()
+  try {
+    if (authMode.value === 'login') {
+      await login(form)
+    } else {
+      await register(form)
+    }
+    closeAuth()
+  } catch (err) {
+    if (err.response && err.response.data) {
+      const data = err.response.data
+      if (typeof data === 'object') {
+        const keys = Object.keys(data)
+        if (keys.length > 0) {
+          const firstKey = keys[0]
+          const firstError = data[firstKey]
+          error.value = `${firstKey === 'username' ? '邮箱' : firstKey}: ${Array.isArray(firstError) ? firstError[0] : firstError}`
+        } else {
+          error.value = '提交失败，请检查输入。'
+        }
+      } else {
+        error.value = String(data)
+      }
+    } else {
+      error.value = '连接服务失败，请确认后端已启动并连接数据库！'
+    }
+  }
 }
 </script>

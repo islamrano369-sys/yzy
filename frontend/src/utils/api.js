@@ -12,8 +12,8 @@ const api = axios.create({
 // 请求拦截器
 api.interceptors.request.use(
   config => {
-    // 从 localStorage 中获取 JWT 或 Token 并注入请求头
-    const token = localStorage.getItem('token')
+    // 从 localStorage 中获取 JWT Access Token 并注入请求头
+    const token = localStorage.getItem('access_token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
