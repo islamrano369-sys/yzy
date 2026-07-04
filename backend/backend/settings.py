@@ -156,6 +156,18 @@ CORS_URLS_REGEX = r"^/api/.*$"
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_ANALYSIS = False
 
+# SimpleUI custom icons
+SIMPLEUI_ICON = {
+    '课程管理': 'fas fa-graduation-cap',
+    'AI 编程课': 'fas fa-book-open',
+    'api': 'fas fa-cogs',
+    '系统通知': 'fas fa-bell',
+    'SystemMessage': 'fas fa-bell',
+    '认证和授权': 'fas fa-user-shield',
+    'User': 'fas fa-user',
+    'Group': 'fas fa-users',
+}
+
 # Authentication backends (allows email or username login)
 AUTHENTICATION_BACKENDS = [
     "api.backends.EmailOrUsernameModelBackend",
