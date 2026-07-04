@@ -119,10 +119,14 @@ const fetchProfile = async () => {
 const logout = () => {
   user.value = null
   membership.value = null
+  purchasedCourses.value = []
+  orders.value = []
   localStorage.removeItem('access_token')
   localStorage.removeItem('refresh_token')
   safeWrite('nova-user', null)
   safeWrite('nova-membership', null)
+  safeWrite('nova-courses', [])
+  safeWrite('nova-orders', [])
 }
 
 const createOrder = (type, id, title, amount) => {
