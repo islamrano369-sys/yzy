@@ -7,5 +7,7 @@ router.register(r'messages', SystemMessageViewSet, basename='message')
 
 urlpatterns = [
     path('status/', api_status, name='api_status'),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
     path('', include(router.urls)),
 ]

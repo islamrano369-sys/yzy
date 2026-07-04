@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",            # Django REST Framework
+    "rest_framework_simplejwt",  # Simple JWT Authentication
+    "djoser",                    # Djoser Auth Library
     "corsheaders",               # CORS headers
     "api",                       # REST API App
 ]
@@ -152,4 +154,25 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # SimpleUI options
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_ANALYSIS = False
+
+# REST Framework authentication config
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
+
+# Djoser authentication configuration
+DJOSER = {
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "LOGIN_FIELD": "username",
+}
+
+# Simple JWT configurations
+from datetime import timedelta
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
 
