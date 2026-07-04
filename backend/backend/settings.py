@@ -78,9 +78,12 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+from dotenv import load_dotenv
+load_dotenv(BASE_DIR / ".env")
+
 DB_NAME = os.environ.get("DB_NAME", "yzy_db")
 DB_USER = os.environ.get("DB_USER", "root")
-DB_PASSWORD = os.environ.get("DB_PASSWORD", "yinzhaoyuV587")
+DB_PASSWORD = os.environ.get("DB_PASSWORD", "123456")
 DB_HOST = os.environ.get("DB_HOST", "127.0.0.1")
 DB_PORT = os.environ.get("DB_PORT", "3306")
 
