@@ -9,6 +9,7 @@ const routes = [
   { path: '/agents/:slug', name: 'agent-detail', component: () => import('../views/AgentDetail.vue'), meta: { title: '智能体工作台｜NOVA AI' } },
   { path: '/membership', name: 'membership', component: () => import('../views/Membership.vue'), meta: { title: '会员套餐｜NOVA AI' } },
   { path: '/profile', name: 'profile', component: () => import('../views/Profile.vue'), meta: { title: '个人中心｜NOVA AI' } },
+  { path: '/activate/:uid/:token', name: 'activate', component: () => import('../views/Activate.vue'), meta: { title: '账户激活｜NOVA AI' } },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('../views/NotFound.vue'), meta: { title: '页面未找到｜NOVA AI' } },
 ]
 

@@ -111,7 +111,6 @@ const register = async ({ name, email, password }) => {
     first_name: name.trim(),
     last_name: ''
   })
-  await login({ email, password })
 }
 
 const fetchProfile = async () => {

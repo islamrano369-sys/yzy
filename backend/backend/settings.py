@@ -172,6 +172,13 @@ REST_FRAMEWORK = {
 DJOSER = {
     "USER_CREATE_PASSWORD_RETYPE": True,
     "LOGIN_FIELD": "username",
+    "SEND_ACTIVATION_EMAIL": True,                  # 开启发送激活邮件
+    "ACTIVATION_URL": "activate/{uid}/{token}",      # 对应 Vue 的激活 URL 模板
+    "DOMAIN": "localhost:3000",                     # 前端运行的域名与端口，以拼装出正确的激活链接
+    "SITE_NAME": "NOVA AI",
+    "EMAIL": {
+        "activation": "api.emails.ActivationEmail",  # 自定义激活邮件类以锁定前端域名
+    },
     "SERIALIZERS": {
         "user_create": "api.serializers.UserCreateSerializer",
         "user": "api.serializers.UserSerializer",
@@ -186,4 +193,13 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+# Django Email Settings (Load from .env)
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "api.email_backends.FallbackEmailBackend")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.163.com")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "465"))
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "True") == "True"
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "15954212367@163.com")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "VFtZQQJBCqNbtrY6")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "15954212367@163.com")
 
