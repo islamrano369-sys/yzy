@@ -75,7 +75,102 @@ watch(orders, (value) => {
 
 const mapCourse = (data) => {
   const highlightsList = data.highlights ? data.highlights.split('\n').map(h => h.trim()).filter(Boolean) : []
-  const slug = data.id === 1 ? 'ai-fullstack' : (data.id === 2 ? 'agent-engineering' : `course-${data.id}`)
+  
+  // Custom slugs mapping
+  const slugMap = {
+    1: 'ai-fullstack',
+    2: 'agent-engineering',
+    3: 'llm-finetuning-rag',
+    4: 'multimodal-creative',
+  }
+  const slug = slugMap[data.id] || `course-${data.id}`
+  
+  // Default metadata
+  let level = '基础可学'
+  let duration = '30 课时'
+  let projects = '5 个项目'
+  let accent = 'coral'
+  let audience = ['对 AI 编程和开发感兴趣的开发者与爱好者']
+  let projectsList = ['AI 精选项目实战']
+  let syllabus = [
+    ['01', '基础概览', '课程核心概念与实战开发环境搭建'],
+    ['02', '项目实战', '手把手带写核心业务代码与模型交互联调'],
+    ['03', '部署上线', '系统集成部署、自动化测试与线上运营运维'],
+  ]
+  
+  if (data.id === 1) {
+    level = '零基础可学'
+    duration = '36 课时'
+    projects = '8 个项目'
+    accent = 'coral'
+    audience = [
+      '希望转型 AI 开发的程序员',
+      '需要快速验证产品的独立开发者',
+      '想建立完整技术栈的初学者'
+    ]
+    projectsList = ['AI 简历优化器', '知识库问答站', '多模型写作工作台', 'AI 产品分析助手']
+    syllabus = [
+      ['01', 'AI 产品思维', '需求拆解、模型边界与可交付原型'],
+      ['02', 'Vue 交互界面', '组件、状态、路由与高质量产品 UI'],
+      ['03', '服务端能力', '接口设计、数据持久化与权限管理'],
+      ['04', '模型接入', '提示词、结构化输出、流式响应与成本控制'],
+      ['05', '产品化上线', '部署、日志、支付与增长闭环'],
+    ]
+  } else if (data.id === 2) {
+    level = '进阶提升'
+    duration = '42 课时'
+    projects = '6 个智能体'
+    accent = 'mint'
+    audience = [
+      '具备基础开发经验的工程师',
+      '企业数字化与自动化负责人',
+      '需要构建垂直智能体的创业者'
+    ]
+    projectsList = ['电商运营 Agent', '数据分析 Agent', '研究报告 Agent', '客户成功 Agent']
+    syllabus = [
+      ['01', 'Agent 架构', '任务规划、工具调用、上下文和记忆'],
+      ['02', '工作流编排', '顺序、分支、循环与多智能体协作'],
+      ['03', '工具与数据', '搜索、知识库、数据库和内部系统'],
+      ['04', '可靠性工程', '评测、可观测性、护栏与失败恢复'],
+      ['05', '行业落地', '从业务指标到可持续运行的智能体'],
+    ]
+  } else if (data.id === 3) {
+    level = '高阶进阶'
+    duration = '48 课时'
+    projects = '4 个大项目'
+    accent = 'coral'
+    audience = [
+      '具备 Python 基础的后端开发者',
+      '希望落地私有大模型的企业技术架构师',
+      '对大模型微调有学习和探索兴趣的算法工程师'
+    ]
+    projectsList = ['企业私有知识库 (RAG) 问答系统', 'Qwen-7B 行业专属客服 LoRA 微调', 'LLM Agent 调度与路由框架', '大模型检索评估与幻觉检测台']
+    syllabus = [
+      ['01', '微调与 RAG 基础', '大模型原理、Prompt 优化与向量数据库基础'],
+      ['02', 'RAG 检索增强实战', '双路召回、重排 (Rerank)、多文档解析与 Chunk 划分策略'],
+      ['03', '模型微调技术', 'Lora、QLoRA 原理，Deepspeed 分布式训练，微调数据集构建与清洗'],
+      ['04', '模型评估与对齐', 'Ragas 自动评估指标、RLHF & DPO 基础理论与对齐实战'],
+      ['05', '高并发部署与上线', 'vLLM 推理加速、分词缓存、流水线并行与 API 服务封装'],
+    ]
+  } else if (data.id === 4) {
+    level = '零基础进阶'
+    duration = '32 课时'
+    projects = '10+ 创意案例'
+    accent = 'mint'
+    audience = [
+      '希望提高产出效率的视觉设计师与画师',
+      '希望在产品中集成 AI 绘图能力的研发者',
+      '寻找高效制作商业海报和视频的自媒体创作者'
+    ]
+    projectsList = ['电商商品背景融合与海报设计', 'Stable Diffusion 精准控图与 LoRA 风格包训练', 'ComfyUI 复杂工作流连招搭建', 'AI 数字人视频与图生短视频制作']
+    syllabus = [
+      ['01', 'AI 绘画底座与词法', 'Stable Diffusion & Midjourney 模型特点、提示词语法与底座精选'],
+      ['02', 'ControlNet 控图技术', '深度图、线稿、姿态估计等多维度画面控制及局部重绘'],
+      ['03', 'LoRA 训练大师班', '数据集搜集、打标、训练参数配置与风格泛化测试'],
+      ['04', 'ComfyUI 节点流控制', '节点连线逻辑、自定义插件安装、高阶放大算法与批量工作流'],
+      ['05', '多模态视频大后期', 'Runway/SVD 图生视频、文字生成音乐与 AI 嘴形同步数字人制作'],
+    ]
+  }
   
   return {
     id: data.id,
@@ -90,38 +185,14 @@ const mapCourse = (data) => {
     detailImage: data.detail_image,
     instructor: data.instructor,
     rating: Number(data.rating),
-    level: data.id === 2 ? '进阶提升' : '零基础可学',
-    duration: data.id === 2 ? '42 课时' : '36 课时',
-    projects: data.id === 2 ? '6 个智能体' : '8 个项目',
-    accent: data.id % 2 === 0 ? 'mint' : 'coral',
+    level: level,
+    duration: duration,
+    projects: projects,
+    accent: accent,
     outcomes: highlightsList.length > 0 ? highlightsList : ['独立交付可运行作品', '完成项目实战训练', '获得结业证书'],
-    audience: data.id === 2 ? [
-      '具备基础开发经验的工程师',
-      '企业数字化与自动化负责人',
-      '需要构建垂直智能体的创业者'
-    ] : [
-      '希望转型 AI 开发的程序员',
-      '需要快速验证产品的独立开发者',
-      '想建立完整技术栈的初学者'
-    ],
-    projectsList: data.id === 2 ? [
-      '电商运营 Agent', '数据分析 Agent', '研究报告 Agent', '客户成功 Agent'
-    ] : [
-      'AI 简历优化器', '知识库问答站', '多模型写作工作台', 'AI 产品分析助手'
-    ],
-    syllabus: data.id === 2 ? [
-      ['01', 'Agent 架构', '任务规划、工具调用、上下文和记忆'],
-      ['02', '工作流编排', '顺序、分支、循环与多智能体协作'],
-      ['03', '工具与数据', '搜索、知识库、数据库和内部系统'],
-      ['04', '可靠性工程', '评测、可观测性、护栏与失败恢复'],
-      ['05', '行业落地', '从业务指标到可持续运行的智能体'],
-    ] : [
-      ['01', 'AI 产品思维', '需求拆解、模型边界与可交付原型'],
-      ['02', 'Vue 交互界面', '组件、状态、路由与高质量产品 UI'],
-      ['03', '服务端能力', '接口设计、数据持久化与权限管理'],
-      ['04', '模型接入', '提示词、结构化输出、流式响应与成本控制'],
-      ['05', '产品化上线', '部署、日志、支付与增长闭环'],
-    ]
+    audience: audience,
+    projectsList: projectsList,
+    syllabus: syllabus
   }
 }
 
